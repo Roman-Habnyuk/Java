@@ -1,14 +1,17 @@
+import java.time.LocalDate;
+import java.time.Period;
+
 public class Student {
     private String firstName;
     private String lastName;
-    private String birthdate; // Можна використовувати LocalDate для дати
+    private LocalDate birthdate;
     private int rank;
 
     // Конструктор
-    public Student(String firstName, String lastName, String birthdate, int rank) {
+    public Student(String firstName, String lastName, LocalDate birthdate, int rank) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthdate = birthdate;
+        setBirthdate(birthdate); // Використовуємо сеттер для перевірки віку
         this.rank = rank;
     }
 
@@ -29,11 +32,14 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public String getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
+        if (calculateAge(birthdate) < 15) {
+            throw new IllegalArgumentException("Студент повинен бути не молодший 15 років");
+        }
         this.birthdate = birthdate;
     }
 
@@ -43,6 +49,11 @@ public class Student {
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    // Метод для розрахунку віку
+    private int calculateAge(LocalDate birthdate) {
+        return Period.between(birthdate, LocalDate.now()).getYears();
     }
 
     // Метод toString() для зручного виведення інформації про студента
